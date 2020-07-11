@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { Fontisto } from '@expo/vector-icons'
@@ -6,12 +6,15 @@ import {useState} from 'react'
 import * as Location from 'expo-location'
 import { EvilIcons } from '@expo/vector-icons' 
 import ThemeContext from './context/ThemeContext';
+import AppTheme from "./components/Themes";
+import MainCard from "./components/MainCard"
+
 
 export default function App() {
 
   const axios = require('axios')
-  const themeHook = useState("light");
-  
+  const themeHook = useState("dark");
+  const theme = useContext(ThemeContext)[0];
   const [darkTheme, setDarkTheme] = useState(true)
   
   const [location, setLocation] = useState(null);
@@ -189,80 +192,70 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-
-      <TouchableOpacity style={styles.refreshButton} onPress={() => requesWeatherApi()}>
-        <EvilIcons name="refresh" color={darkTheme ? 'white'  : 'black'} size={24}/>
-      </TouchableOpacity>
-
-      <Feather style={styles.icon} name="sun" size={40} color="orange" />
-
-      <View style={styles.temperatureView}>
-        <Text style={styles.temperatureText}>{currentTemperature}</Text>
-        <Text style={styles.temperatureDegree}>°C</Text> 
-      </View>
+    <ThemeContext.Provider value = {themeHook}>
+      <View style={styles.container}>
       
-      <Text style={styles.localizationText}>{cityName}, {countryName}, 13:52</Text>
+        <TouchableOpacity style={styles.refreshButton} onPress={() => requesWeatherApi()}>
+          <EvilIcons name="refresh" color={darkTheme ? 'white'  : 'black'} size={24}/>
+        </TouchableOpacity>
 
-      <View style={styles.cardsHoursDay}>
+        <Feather style={styles.icon} name="sun" size={40} color="orange" />
 
-        <View style={[styles.card, {backgroundColor: darkTheme ? '#D26F2F'  : '#F98539'}]}>
-          <Text style={styles.cardHourText}>Manhã</Text>
-          <Feather style={styles.cardIcon} name="sun" size={40} color="white" />
-          <Text style={styles.cardTemparatureText}>27°</Text>
+        <View style={styles.temperatureView}>
+          <Text style={styles.temperatureText}>{currentTemperature}</Text>
+          <Text style={styles.temperatureDegree}>°C</Text> 
+        </View>
+        
+        <Text style={styles.localizationText}>{cityName}, {countryName}, 13:52</Text>
+
+        <View style={styles.cardsHoursDay}>
+
+          <MainCard title={"Manhã"} icon={'morning'} temperature={"27°"} backgroundColor={'#D26F2F'} ></MainCard>
+          <MainCard title={"Tarde"} icon={'afternoon'} temperature={"31°"} backgroundColor={darkTheme ? '#D29600'  : '#FCC63F'} ></MainCard>
+          <MainCard title={"Noite"} icon={'night'} temperature={"21°"} backgroundColor={darkTheme ? '#008081'  : '#38B7B8'} ></MainCard>
+
+          
+
+        </View>
+    
+        <View style={styles.info}>
+
+          <Text style={styles.infoText}>Informações adcionais:</Text>
+
+          <View style={styles.addtionalInfo}>
+
+            <View style={styles.cardAdditionalInfo}>
+              <Text style={styles.climaticalInfoText}>Vento</Text>
+              <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{wind} m/h</Text>
+            </View>
+
+            <View style={styles.cardAdditionalInfo}>
+              <Text style={styles.climaticalInfoText}>Umidade</Text>
+              <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{humidity}%</Text>
+            </View>
+
+            <View style={styles.cardAdditionalInfo}>
+              <Text style={styles.climaticalInfoText}>Temp. Min.</Text>
+              <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{temperatureMin} °C</Text>
+            </View>
+
+            <View style={styles.cardAdditionalInfo}>
+              <Text style={styles.climaticalInfoText}>Temp. Max</Text>
+              <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{temperatureMax} °C</Text>
+            </View>
+
+          </View>
+
         </View>
 
-        <View style={[styles.card, {backgroundColor: darkTheme ? '#D29600'  : '#FCC63F'}]}> 
-          <Text style={styles.cardHourText}>Tarde</Text>
-          <Fontisto style={styles.cardIcon} name="day-cloudy" size={40} color="white" />
-          <Text style={styles.cardTemparatureText}>31°</Text>
+        <View style={styles.themeButton}>
+          <View style={styles.themeButtonSquare}>
+            <TouchableOpacity style={styles.themeButtonCircle} onPress={() =>darkTheme ? setDarkTheme(false) : setDarkTheme(true)}></TouchableOpacity>
+          </View>
         </View>
-
-        <View style={[styles.card, {backgroundColor: darkTheme ? '#008081'  : '#38B7B8'}]}>
-          <Text style={styles.cardHourText}>Noite</Text>
-          <Feather style={styles.cardIcon} name="cloud-rain" size={40} color="white" />
-          <Text style={styles.cardTemparatureText}>21°</Text>
-        </View>
-
+        
       </View>
-  
-      <View style={styles.info}>
-
-        <Text style={styles.infoText}>Informações adcionais:</Text>
-
-        <View style={styles.addtionalInfo}>
-
-          <View style={styles.cardAdditionalInfo}>
-            <Text style={styles.climaticalInfoText}>Vento</Text>
-            <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{wind} m/h</Text>
-          </View>
-
-          <View style={styles.cardAdditionalInfo}>
-            <Text style={styles.climaticalInfoText}>Umidade</Text>
-            <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{humidity}%</Text>
-          </View>
-
-          <View style={styles.cardAdditionalInfo}>
-            <Text style={styles.climaticalInfoText}>Temp. Min.</Text>
-            <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{temperatureMin} °C</Text>
-          </View>
-
-          <View style={styles.cardAdditionalInfo}>
-            <Text style={styles.climaticalInfoText}>Temp. Max</Text>
-            <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{temperatureMax} °C</Text>
-          </View>
-
-        </View>
-
-      </View>
-
-      <View style={styles.themeButton}>
-        <View style={styles.themeButtonSquare}>
-          <TouchableOpacity style={styles.themeButtonCircle} onPress={() =>darkTheme ? setDarkTheme(false) : setDarkTheme(true)}></TouchableOpacity>
-        </View>
-      </View>
-
-    </View>
+    </ThemeContext.Provider>
   );
 }
 
