@@ -5,15 +5,16 @@ import { Fontisto } from '@expo/vector-icons'
 import {useState} from 'react'
 import * as Location from 'expo-location'
 import { EvilIcons } from '@expo/vector-icons' 
+import ThemeContext from './context/ThemeContext';
 
 export default function App() {
 
   const axios = require('axios')
+  const themeHook = useState("light");
+  
   const [darkTheme, setDarkTheme] = useState(true)
   
   const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-
   const [cityName, setCityName] = useState('Fortaleza')
   const [countryName, setCountryName] = useState('Brasil')
 
