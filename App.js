@@ -6,7 +6,8 @@ import {useState} from 'react'
 import * as Location from 'expo-location'
 import { EvilIcons } from '@expo/vector-icons' 
 import ThemeContext from './context/ThemeContext';
-import AppTheme from "./components/Themes";
+
+import InfoCard from './components/InfoCard'
 import MainCard from "./components/MainCard"
 
 
@@ -91,30 +92,6 @@ export default function App() {
     localizationText:{
       color: darkTheme ? '#e0e0e0'  : 'black',
     },  
-    card:{
-      
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 20,
-      margin: 10,
-      width: 110,
-      height: 210,
-      
-    },
-    cardHourText:{
-      color: darkTheme ? 'white'  : 'white',
-      margin: 15,
-      fontSize: 20,
-    },
-    cardTemparatureText:{
-      color: darkTheme ? 'white'  : 'white',
-      margin: 15,
-      fontSize: 20,
-    },
-    cardIcon: {
-      color: darkTheme ? '#e0e0e0'  : 'white',
-      margin: 15
-    },
     info: {
       alignItems: 'center',
       borderRadius: 20,
@@ -133,21 +110,7 @@ export default function App() {
       flexDirection: 'row',
       flexWrap: 'wrap',
     },
-    climaticalInfoText:{
-      color: darkTheme ? '#e0e0e0'  : 'white',
-      margin: 5,
-      marginLeft: 15,
-      fontSize: 18,
-    },
-    cardAdditionalInfo:{
-      alignItems: 'center',
-      margin: 10,
-      minWidth: 150,
-      
-    },
-    climaticalInfoSubText: {
-      color: darkTheme ?'#adadad' : '#E4E4E4',
-    },  
+    
     
   });
 
@@ -209,43 +172,19 @@ export default function App() {
         <Text style={styles.localizationText}>{cityName}, {countryName}, 13:52</Text>
 
         <View style={styles.cardsHoursDay}>
-
-          <MainCard title={"Manhã"} icon={'morning'} temperature={"27°"} backgroundColor={'#D26F2F'} ></MainCard>
+          <MainCard title={"Manhã"} icon={'morning'} temperature={"27°"} backgroundColor={ darkTheme ?'#D26F2F' : '#CC6E30'} ></MainCard>
           <MainCard title={"Tarde"} icon={'afternoon'} temperature={"31°"} backgroundColor={darkTheme ? '#D29600'  : '#FCC63F'} ></MainCard>
           <MainCard title={"Noite"} icon={'night'} temperature={"21°"} backgroundColor={darkTheme ? '#008081'  : '#38B7B8'} ></MainCard>
-
-          
-
         </View>
     
         <View style={styles.info}>
-
           <Text style={styles.infoText}>Informações adcionais:</Text>
-
           <View style={styles.addtionalInfo}>
-
-            <View style={styles.cardAdditionalInfo}>
-              <Text style={styles.climaticalInfoText}>Vento</Text>
-              <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{wind} m/h</Text>
-            </View>
-
-            <View style={styles.cardAdditionalInfo}>
-              <Text style={styles.climaticalInfoText}>Umidade</Text>
-              <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{humidity}%</Text>
-            </View>
-
-            <View style={styles.cardAdditionalInfo}>
-              <Text style={styles.climaticalInfoText}>Temp. Min.</Text>
-              <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{temperatureMin} °C</Text>
-            </View>
-
-            <View style={styles.cardAdditionalInfo}>
-              <Text style={styles.climaticalInfoText}>Temp. Max</Text>
-              <Text style={[styles.climaticalInfoText, styles.climaticalInfoSubText]}>{temperatureMax} °C</Text>
-            </View>
-
+            <InfoCard title={'Vento'} variable={wind} ></InfoCard>
+            <InfoCard title={'Umidade'} variable={humidity} ></InfoCard>
+            <InfoCard title={'Temp. Min'} variable={temperatureMin} ></InfoCard>
+            <InfoCard title={'Temp. Max'} variable={temperatureMax} ></InfoCard>
           </View>
-
         </View>
 
         <View style={styles.themeButton}>
